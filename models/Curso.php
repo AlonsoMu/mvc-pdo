@@ -29,8 +29,20 @@ class Curso extends Conexion{
     }
   }
 
-  public function registrarCurso(){
+  public function registrarCurso($datos = []){
     try {
+      //1. Preparamos la consulta
+      $consulta = $this->accesoBD->prepare("CALL spu_cursos_registrar(?,?,?,?,?)");
+      //2. Ejecutamos la consulta
+      $consulta->execute(
+        array(
+          $datos["nombrecurso"],
+          $datos["especialidad"],
+          $datos["complejidad"],
+          $datos["fechainicio"],
+          $datos["precio"]
+        )
+      );
       
     }
     catch (Exception $e) {
@@ -38,7 +50,7 @@ class Curso extends Conexion{
     }
   }
 
-  public function eliminarCurso(){
+  public function eliminarCurso($idcurso = 0){
     try {
       
     }

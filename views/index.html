@@ -56,32 +56,6 @@
             </tr>
           </thead>
           <tbody>
-            <!--Agregar datos de prueba-->
-            <tr>
-              <td>1</td>
-              <td>Curso de Autocad</td>
-              <td>Administracion</td>
-              <td>B</td>
-              <td>02/04/2023</td>
-              <td>200</td>
-              <td>
-                <a href="" class="btn btn-danger btn-sm"><i class="bi bi-trash3-fill"></i></a>
-                <a href="" class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Curso de office</td>
-              <td>ETI</td>
-              <td>B</td>
-              <td>03/05/2023</td>
-              <td>300</td>
-              <td>
-                <a href="" class="btn btn-danger btn-sm"><i class="bi bi-trash3-fill"></i></a>
-                <a href="" class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>
-              </td>
-            </tr>
-            <!--Fin de datos de prueba-->
           </tbody>
         </table>
 
@@ -108,10 +82,10 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="">
+          <form id="formulario-cursos">
             <div class="mb-3">
               <label for="nombrecurso" class="form-label">Nombre curso</label>
-              <input type="text" class ="form-control form-control-sm" id="nombre-curso">
+              <input type="text" class ="form-control form-control-sm" id="nombrecurso">
             </div>
             <div class="modal-body">
               <form action="">
@@ -125,7 +99,7 @@
                   </select>
                 </div>
                 <div class="class mb-3">
-                  <label for="" class="form-label">Complejidad</label>
+                  <label for="complejidad" class="form-label">Complejidad</label>
                   <select id="complejidad" class="form-select form-select-sm">
                     <option value="">Seleccione</option>
                     <option value="B">Basico</option>
@@ -145,19 +119,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary btn-sm">Guardar</button>
+          <button type="button" class="btn btn-primary btn-sm" id="guardar-curso">Guardar</button>
         </div>
       </div>
     </div>
   </div>
   
   
-  <!-- Optional: Place to the bottom of scripts -->
-  <script>
-    const myModal = new bootstrap.Modal(document.getElementById('modalId'), options)
-  
-  </script>
-
   <!--Fin zona de modales-->
 
 
@@ -187,6 +155,41 @@
           }
         });
       }
+
+
+      function registrarCurso(){
+        //Pendiente de validar....
+        //confirm("¿Te gusta el DEV?");
+        if (confirm("¿Está seguro de registrar este nuevo curso?")){
+          $.ajax({
+            url: '../controllers/curso.controller.php',
+            type: 'POST',
+            data: {
+              operacion     : 'registrar',
+              nombrecurso   : $("#nombrecurso").val(),
+              especialidad  : $("#especialidad").val(),
+              complejidad   : $("#complejidad").val(),
+              fechainicio   : $("#fechainicio").val(),
+              precio        : $("#precio").val()
+            },
+            success: function(result){
+              if (result == ""){
+                //Reiniciar el formulario
+                $("#formulario-cursos")[0].reset();
+
+                //Actualizar la tabla
+                mostrarCursos();
+
+                //Cerrar el modal
+                $("modal-registro-cursos").modal('hide');
+              }
+            }
+          });
+        }
+      }
+
+      //Eventos
+      $("#guardar-curso").click(registrarCurso);
 
       //Ejecucion automatica
       mostrarCursos();
