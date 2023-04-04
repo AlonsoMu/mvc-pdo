@@ -34,7 +34,7 @@
       </div>
       <div class="card-body">
         <!--Tabla-->
-        <table class="table table-sm table-striped">
+        <table class="table table-sm table-striped" id="tabla-cursos">
           <colgroup>
             <col width = "5%">
             <col width = "30%">
@@ -169,6 +169,32 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
+
+  <!--JQuery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+
+      function mostrarCursos(){
+        $.ajax({
+          url: '../controllers/curso.controller.php',
+          type: 'POST',
+          data: {operacion: 'listar'},
+          dataType: 'text',
+          success: function(result){
+            $("#tabla-cursos tbody").html(result)
+          }
+        });
+      }
+
+      //Ejecucion automatica
+      mostrarCursos();
+
+
+    });
+  </script>
+
 </body>
 
 </html>
