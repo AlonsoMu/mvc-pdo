@@ -29,7 +29,7 @@ class Conexion{
       $this->pdo = $this->conectarServidor();
       
       //Controlar los errores (sera controlado por los TRY-CATCH)
-      $this->pdo->setAttribute(PDO::AATR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
       //Retornamos la conexion al modelo que lo necesite
       return $this->pdo;
