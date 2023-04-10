@@ -23,6 +23,7 @@ INSERT INTO cursos(nombrecurso, especialidad, complejidad,fechainicio,precio) VA
 
 SELECT * FROM cursos;
 
+UPDATE cursos SET estado='1';
 -- STORE PROCEDURE
 -- Un procedimiento almacenado es un PROGRAMA que se ejecuta desde el
 -- motor de BD, y que permite recibir valores de entrada, realizar
@@ -79,3 +80,61 @@ END $$
 
 CALL spu_cursos_eliminar(4);
 SELECT * FROM cursos;
+
+-- Lunes 10 abril 2023
+DELIMITER $$
+CREATE PROCEDURE spu_cursos_recuperar_ids(IN _idcurso INT)
+BEGIN
+	SELECT * FROM cursos WHERE idcurso =  _idcurso;
+END $$
+
+CALL spu_cursos_recuperar_ids(4);
+
+-- Actualizar
+DELIMITER $$
+CREATE PROCEDURE spu_cursos_actualizar
+(
+	IN _idcurso			INT,
+	IN _nombrecurso	VARCHAR(50),
+	IN _especialidad	VARCHAR(70),
+	IN _complejidad	CHAR(1),
+	IN _fechainicio	DATE,
+	IN _precio			DECIMAL(7,2)
+)
+BEGIN
+	UPDATE cursos SET
+		nombrecurso = _nombrecurso,
+		especialidad = _especialidad,
+		complejidad = _complejidad,
+		fechainicio = _fechainicio,
+		precio = _precio,
+		fechaupdate = NOW()
+	WHERE idcurso = _idcurso;
+END $$
+
+CALL spu_cursos_actualizar(3,'Excel','ETI','B','2023-06-12',300);
+
+SELECT * FROM cursos WHERE idcurso = 3;
+
+
+-- Creando tabla de usuario
+CREATE TABLE usuarios
+(
+	idusuario		INT AUTO_INCREMENT 	PRIMARY KEY,
+	nombreusuario	VARCHAR(30)				NOT NULL,
+	claveacceso		VARCHAR(90)				NOT NULL,
+	apellidos		VARCHAR(30)				NOT NULL,
+	nombres			VARCHAR(30)				NOT NULL,
+	nivelacceso		CHAR(1)					NOT NULL DEFAULT 'A',
+	estado			CHAR(1)					NOT NULL DEFAULT '1',
+	fecharegistro	DATETIME					NOT NULL DEFAULT NOW(),
+	fechaupdate		DATETIME					NULL,
+	CONSTRAINT uk_nombreusuario_usa UNIQUE(nombreusuario)
+)ENGINE = INNODB;
+
+INSERT INTO usuarios(nombreusuario, claveacceso, apellidos, nombres) VALUES
+('Alonso','123456','Muñoz Quispe','Alonso Enrique'),
+('Yorghet','987654','Hernandez Yeren','Yorghet Fernanda');
+
+SELECT * FROM usuarios;
+
